@@ -1,3 +1,5 @@
+from datetime import datetime
+
 class Task:
     used_hr = 0
     avg_hr = 0
@@ -31,12 +33,12 @@ class Task:
             return 0
 
     def set_avg_hr(self, date):
-        """
-        int days = Time.determineRangeOfDays(date, this.dueDate) + 1;
-		int avgHours = this.totalHours / days;
-		avgHours += this.totalHours % days == 0 ? 0 : 1;
-		this.averageNumHours = avgHours;
-        """
+        #TODO Need to add Time utility class
+        days = Time.determine_range(date, self.due_date) + 1
+        avg = self.total_hr / days
+        if self.total_hr % days != 0:
+            avg += 1
+        self.avg_hr = avg
 
     def __str__(self):
         return "Task [name=" + self.name + ", total=" + self.total_hr + "]"
