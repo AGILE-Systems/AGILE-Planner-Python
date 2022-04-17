@@ -1,47 +1,54 @@
 class Task:
     used_hr = 0
-    avg_num_hr = 0
+    avg_hr = 0
 
     def __init__(self, name, total_hr, incrementation):
         self.name = name
         self.total_hr = total_hr
         self.due_date = incrementation
 
+    def add_sub_task(self, hours, overflow):
+        subtask = None
+        if hours > 0 and self.used_hr + hours <= self.total_hr:
+            subtask = Task.SubTask(self, hours, overflow)
+            self.used_hr += hours
+        return subtask
+
     def reset(self):
         self.used_hr = 0
-        self.avg_num_hr = 0
+        self.avg_hr = 0
 
-    def get_subtotal_hr_remaining(self):
+    def get_subtotal_remaining(self):
         return self.total_hr - self.used_hr
-
-    def __str__(self):
-        return "Task [name=" + self.name + ", total=" + self.total_hr + "]"
 
     def __cmp__(self, other):
         time_diff = self.due_date - other.due_date
-        if time_diff < 0 or time_diff == 0 and self.get_subtotal_hr_remaining() > other.get_subtotal_hr_remaining():
+        if time_diff < 0 or time_diff == 0 and self.get_subtotal_remaining() > other.get_subtotal_remaining():
             return -1
-        elif time_diff > 0 or time_diff == 0 and self.get_subtotal_hr_remaining() < other.get_subtotal_hr_remaining():
+        elif time_diff > 0 or time_diff == 0 and self.get_subtotal_remaining() < other.get_subtotal_remaining():
             return 1
         else:
             return 0
 
-
-class SubTask:
-    def __init__(self, task, sub_hr, overflow_status):
-        self.task = task
-        self.sub_hr = sub_hr
-        self.overflow_status = overflow_status
+    def set_avg_hr(self, date):
+        """
+        int days = Time.determineRangeOfDays(date, this.dueDate) + 1;
+		int avgHours = this.totalHours / days;
+		avgHours += this.totalHours % days == 0 ? 0 : 1;
+		this.averageNumHours = avgHours;
+        """
 
     def __str__(self):
-        return "SubTask [name=" + self.task.name + ", hours=" + self.sub_hr + "]"
+        return "Task [name=" + self.name + ", total=" + self.total_hr + "]"
 
-"""
-NOTE: Will need to call this in invoking class
-    def add_subtask(self, hours, overflow_status):
-        subtask = None
-        if hours > 0 and self.subtotal_hr + hours <= self.total_hr:
-            subtask = SubTask(self, hours, overflow_status)
-            self.subtotal_hr += hours
-        return subtask
-"""
+    class SubTask:
+        def __init__(self, task, hours, overflow):
+            self.task = task
+            self.hours = hours
+            self.overflow = overflow
+
+        def __str__(self):
+            return "SubTask [name=" + self.task.name + ", hours=" + self.hours + "]"
+
+        def __cmp__(self, other):
+            return self.task.__cmp__(other.task)
