@@ -10,39 +10,33 @@ class Task:
     def __init__(self, name, total_hr, incrementation):
         self._avg_hr = 0
         self._used_hr = 0
-        self.name(name)
-        self.total_hr(total_hr)
-        self.due_date(incrementation)
+        self.set_name(name)
+        self.set_total_hr(total_hr)
+        self.set_due_date(incrementation)
 
-    @_name.setter
-    def name(self, name):
+    def set_name(self, name):
         self._name = name
 
-    @property
-    def name(self):
+    def get_name(self):
         return self._name
 
-    @_total_hr.setter
-    def total_hr(self, total_hr):
+    def set_total_hr(self, total_hr):
         self._total_hr = total_hr
 
-    @property
-    def total_hr(self):
+    def get_total_hr(self):
         return self._total_hr
 
-    @_due_date.setter
-    def due_date(self, due_date):
+    def set_due_date(self, due_date):
         self._due_date = due_date
 
-    @property
-    def due_date(self):
+    def get_due_date(self):
         return self._due_date
 
     def add_sub_task(self, hours, overflow):
         subtask = None
-        if hours > 0 and self.used_hr + hours <= self.total_hr:
+        if hours > 0 and self._used_hr + hours <= self._total_hr:
             subtask = Task.SubTask(self, hours, overflow)
-            self.used_hr += hours
+            self._used_hr += hours
         return subtask
 
     def reset(self):
@@ -50,10 +44,10 @@ class Task:
         self._avg_hr = 0
 
     def get_subtotal_remaining(self):
-        return self.total_hr - self.used_hr
+        return self._total_hr - self._used_hr
 
     def __cmp__(self, other):
-        time_diff = self.due_date - other.due_date
+        time_diff = self._due_date - other.get_due_date
         if time_diff < 0 or time_diff == 0 and self.get_subtotal_remaining() > other.get_subtotal_remaining():
             return -1
         elif time_diff > 0 or time_diff == 0 and self.get_subtotal_remaining() < other.get_subtotal_remaining():
@@ -63,14 +57,14 @@ class Task:
 
     def set_avg_hr(self, date):
         # TODO Need to add Time utility class
-        days = Time.determine_range(date, self.due_date) + 1
-        avg = self.total_hr / days
-        if self.total_hr % days != 0:
+        days = Time.determine_range(date, self.get_due_date) + 1
+        avg = self._total_hr / days
+        if self._total_hr % days != 0:
             avg += 1
         self._avg_hr = avg
 
     def __str__(self):
-        return "Task [name=" + self.name + ", total=" + self.total_hr + "]"
+        return "Task [name=" + self._name + ", total=" + self._total_hr + "]"
 
     class SubTask:
         def __init__(self, task, hours, overflow):
@@ -78,20 +72,17 @@ class Task:
             self._hours = hours
             self._overflow = overflow
 
-        @property
-        def task(self):
+        def get_task(self):
             return self._task
 
-        @property
-        def hours(self):
+        def get_hours(self):
             return self._hours
 
-        @property
-        def overflow(self):
+        def get_overflow(self):
             return self._overflow
 
         def __str__(self):
-            return "SubTask [name=" + self._task.name + ", hours=" + self._hours + "]"
+            return "SubTask [name=" + self._task.get_name + ", hours=" + self._hours + "]"
 
         def __cmp__(self, other):
-            return self.task.__cmp__(other.task)
+            return self.get_task.__cmp__(other.get_task)

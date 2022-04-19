@@ -3,41 +3,56 @@ import Task.SubTask
 
 class Day:
 
+    _capacity = None
+    _date = None
+
     def __int__(self, capacity, incrementation):
-        self.capacity = capacity
-        self.date = incrementation
+        self.set_capacity(capacity)
+        self.set_date(incrementation)
         subtask_manager = deque()
-        self.size = 0
+        self._size = 0
+
+    def set_capacity(self, capacity):
+        self._capacity = capacity
+
+    def get_capacity(self):
+        return self._capacity
+
+    def set_date(self, incrementation):
+        #TODO
+
+    def get_date(self):
+        return self._date
 
     def add_subtask(self, task):
-        if self.date == task.due_date:
+        if self.set_date == task.get_due_date:
             overflow = task.get_subtotal_remaining() > self.get_spare_hours()
             hours = task.get_subtotal_remaining()
             subtask = task.add_sub_task(hours, overflow)
             self.subtask_manager.append(subtask)
-            self.size += hours
+            self._size += hours
             return not overflow
         if task.avg_hr == 0:
-            task.set_avg_hr(self.date)
+            task.set_avg_hr(self.set_date)
         hours = task.avg_hr
         if hours > task.get_subtotal_remaining():
             hours = task.get_subtotal_remaining()
-        if hours + self.size > self.capacity:
-            hours = self.capacity - self.size
+        if hours + self._size > self._capacity:
+            hours = self._capacity - self._size
         subtask = task.add_sub_task(hours, False)
         self.subtask_manager.append(subtask)
-        self.size += hours
+        self._size += hours
         return True
 
     def get_parent_task(self, subtask_index):
         subtask = self.subtask_manager.get(subtask_index)
-        return subtask.task
+        return subtask.get_task
 
     def add_subtask_manually(self, task, hours):
         #TODO
 
     def get_spare_hours(self):
-        return self.capacity - self.size
+        return self._capacity - self._size
 
     def num_subtask(self):
         return self.subtask_manager.size()
