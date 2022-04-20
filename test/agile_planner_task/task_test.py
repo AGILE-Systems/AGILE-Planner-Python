@@ -7,15 +7,15 @@ class TaskTest(unittest.TestCase):
 
     def test_constructor(self):
         t1 = Task("CSC316", 4, 2)
-        self.assertEqual("CSC316", t1.get_name)
-        self.assertEqual(4, t1.get_total_hr)
-        self.assertEqual(2, t1.get_due_date)
+        self.assertEqual("CSC316", t1.name)
+        self.assertEqual(4, t1.total_hr)
+        self.assertEqual(2, t1.due_date)
 
     def test_add_sub_task(self):
         t1 = Task("CSC116", 4, 2)
         self.assertIsNone(t1.add_sub_task(0, False))
         st1 = t1.add_sub_task(2, False)
-        self.assertEqual(2, st1.get_hours)
+        self.assertEqual(2, st1.hours)
         self.assertIsNone(t1.add_sub_task(3, False))
         t1.add_sub_task(2, False)
         self.assertEqual(0, t1.get_subtotal_remaining())
@@ -23,7 +23,7 @@ class TaskTest(unittest.TestCase):
     def test_get_subtotal_remaining(self):
         t1 = Task("CSC116", 5, 2)
         st1 = t1.add_sub_task(2, False)
-        self.assertEqual(2, st1.get_hours)
+        self.assertEqual(2, st1.hours)
         self.assertEqual(3, t1.get_subtotal_remaining())
         self.assertIsNone(t1.add_sub_task(4, False))
         t1.add_sub_task(3, False)
@@ -48,8 +48,8 @@ class TaskTest(unittest.TestCase):
     def test_subtask(self):
         t1 = Task("CSC316", 5, 2)
         st1 = t1.add_sub_task(2, False)
-        self.assertEqual(t1, st1.get_task)
-        self.assertEqual(2, st1.get_hours)
+        self.assertEqual(t1, st1.task)
+        self.assertEqual(2, st1.hours)
         # self.assertEqual("SubTask [name=CSC116, hours=2]", st1.__str__())
         self.assertEqual(0, t1.avg_hr)
 
@@ -64,7 +64,7 @@ class TaskTest(unittest.TestCase):
         self.assertEqual(4, t2.get_subtotal_remaining())
         self.assertEqual(0, t2.avg_hr)
 
-        self.assertFalse(st2.get_overflow)
+        self.assertFalse(st2.overflow)
 
         #TypeError: can only concatenate str (not "int") to str
         #self.assertEqual("SubTask [name=CSC116, hours=2]", st1.__str__())
