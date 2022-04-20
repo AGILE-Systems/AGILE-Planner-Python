@@ -9,7 +9,7 @@ class IOProcessing:
         if output is None:
             output = sys.stdout
         if error_count > 0:
-            sys.stdout.write(error_count, "overflows have occurred within schedule...")
+            sys.stdout.write(str(error_count) + " overflows have occurred within schedule...")
         output.write("Day 1: " + day.__str__())
 
     @staticmethod
@@ -17,10 +17,10 @@ class IOProcessing:
         if output is None:
             output = sys.stdout
         if error_count > 0:
-            sys.stdout.write(error_count, "overflows have occurred within schedule...")
+            sys.stdout.write(str(error_count) + " overflows have occurred within schedule...")
         i = 1
         for day in day_list:
-            output.write("Day", i, ": ", day.__str__)
+            output.write("Day " + str(i) + ": " + day.__str__)
             i += 1
 
     @staticmethod
