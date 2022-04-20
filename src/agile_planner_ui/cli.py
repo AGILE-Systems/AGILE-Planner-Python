@@ -40,15 +40,21 @@ class CLI:
             elif str_input == "schedule":
                 self.schedule_manager.schedule_stdio()
             elif str_input == "add":
-                name = input("Name: ")
-                hours = int(input("Hours: "))
-                due_date = int(input("Due Date: "))
-                self.schedule_manager.add_task(Task(name, hours, due_date))
+                try:
+                    name = input("Name: ")
+                    hours = int(input("Hours: "))
+                    due_date = int(input("Due Date: "))
+                    self.schedule_manager.add_task(Task(name, hours, due_date))
+                except ValueError:
+                    print("Invalid input")
             elif str_input == "remove":
-                day_index = int(input("Day Index: "))
-                task_index = int(input("Task Index: "))
-                if self.schedule_manager.remove_task(day_index, task_index) is None:
-                    print("Invalid command")
+                try:
+                    day_index = int(input("Day Index: "))
+                    task_index = int(input("Task Index: "))
+                    if self.schedule_manager.remove_task(day_index, task_index) is None:
+                        print("Invalid command")
+                except ValueError:
+                    print("Invalid input")
             elif str_input == "day":
                 self.schedule_manager.day_stdio()
             elif str_input == "print":
