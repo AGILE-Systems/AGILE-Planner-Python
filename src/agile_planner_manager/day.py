@@ -1,4 +1,3 @@
-
 class Day:
 
     def __int__(self, capacity, incrementation):
