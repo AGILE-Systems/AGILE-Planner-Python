@@ -1,6 +1,7 @@
 from queue import PriorityQueue
 
 from src.agile_planner_io.io_processing import IOProcessing
+from src.agile_planner_manager.day import Day
 
 
 class ScheduleManager:
@@ -56,7 +57,27 @@ class ScheduleManager:
         self.error_count = 0
 
     def generate_schedule(self):
-        #TODO
+        copy = PriorityQueue()
+        processed = PriorityQueue()
+        day_count = 0
+        while self.task_manager.qsize() > 0:
+            day_count += 1
+            day = Day(8, day_count)
+            while day.has_spare_hours() and self.task_manager.qsize() > 0:
+                task = self.task_manager.get()
+                valid_task_status = day.add_subtask(task)
+                if task.get_subtotal_remaining() > 0:
+                    processed.put(task)
+                else:
+                    copy.put(task)
+                    self.error_count += 1
+                    if valid_task_status:
+                        self.error_count = 0
+                    if not valid_task_status or not day.has_spare_hours():
+                        while self.task_manager.qsize() > 0 and self.task_manager.queue[0].due_date == day.date:
+                            copy.put(self.task_manager.queue[0])
+                            day.add_subtask(self.task_manager.get())
+                            self.error_count += 1
 
     def day_stdio(self):
         if len(self.schedule) == 0:

@@ -7,7 +7,7 @@ class Day:
         self.size = 0
 
     def add_subtask(self, task):
-        if self.date == task.get_due_date:
+        if self.date == task.due_date:
             overflow = task.get_subtotal_remaining() > self.get_spare_hours()
             hours = task.get_subtotal_remaining()
             subtask = task.add_sub_task(hours, overflow)
