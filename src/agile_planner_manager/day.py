@@ -30,8 +30,10 @@ class Day:
         subtask = self.subtask_manager.index(subtask_index)
         return subtask.task
 
+    """
     def add_subtask_manually(self, task, hours):
         #TODO
+    """
 
     def get_spare_hours(self):
         return self.capacity - self.size

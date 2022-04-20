@@ -3,6 +3,13 @@ from src.agile_planner_manager.manager import ScheduleManager
 from src.agile_planner_task.task import Task
 
 
+class CLI:
+
+    def __init__(self):
+        self.schedule_manager = ScheduleManager()
+        self.command_manual = CommandManual()
+
+
 def output_header():
     print("Welcome to AGILE Planner 0.2.0\n"
           + "\nChangelog:\n"
@@ -22,55 +29,50 @@ def output_header():
           + "To output all commands, enter: list\nTo access the manual for a command, enter: man <command>\n")
 
 
-class CLI:
+def execute(cli):
+    output_header()
 
-    def __init__(self):
-        self.schedule_manager = ScheduleManager()
-        self.command_manual = CommandManual()
-
-    def execute(self):
-        output_header()
-
-        while True:
-            str_input = input("> ")
-            if str_input == "list":
-                print("list\nschedule\ntime\nadd\nremove\nedit\nday\nlog\nprint\nread\nquit")
-            elif str_input == "time":
-                print("Current time")
-            elif str_input == "schedule":
-                self.schedule_manager.schedule_stdio()
-            elif str_input == "add":
-                try:
-                    name = input("Name: ")
-                    hours = int(input("Hours: "))
-                    due_date = int(input("Due Date: "))
-                    self.schedule_manager.add_task(Task(name, hours, due_date))
-                except ValueError:
-                    print("Invalid input")
-            elif str_input == "remove":
-                try:
-                    day_index = int(input("Day Index: "))
-                    task_index = int(input("Task Index: "))
-                    if self.schedule_manager.remove_task(day_index, task_index) is None:
-                        print("Invalid command")
-                except ValueError:
-                    print("Invalid input")
-            elif str_input == "day":
-                self.schedule_manager.day_stdio()
-            elif str_input == "print":
-                filename = input("Filename: ")
-                self.schedule_manager.schedule_file("output/" + filename)
-            elif str_input == "read":
-                filename = input("Filename: ")
-                self.schedule_manager.process_tasks(filename)
-            elif str_input == "quit":
-                break
-            elif str_input == "man":
-                command = input("Command: ")
-                if self.command_manual.manual.get(command) is not None:
-                    print(self.command_manual.manual.get(command))
-                else:
+    while True:
+        str_input = input("> ")
+        if str_input == "list":
+            print("list\nschedule\ntime\nadd\nremove\nedit\nday\nlog\nprint\nread\nquit")
+        elif str_input == "time":
+            print("Current time")
+        elif str_input == "schedule":
+            cli.schedule_manager.schedule_stdio()
+        elif str_input == "add":
+            try:
+                name = input("Name: ")
+                hours = int(input("Hours: "))
+                due_date = int(input("Due Date: "))
+                cli.schedule_manager.add_task(Task(name, hours, due_date))
+            except ValueError:
+                print("Invalid input")
+        elif str_input == "remove":
+            try:
+                day_index = int(input("Day Index: "))
+                task_index = int(input("Task Index: "))
+                if cli.schedule_manager.remove_task(day_index, task_index) is None:
                     print("Invalid command")
+            except ValueError:
+                print("Invalid input")
+        elif str_input == "day":
+            cli.schedule_manager.day_stdio()
+        elif str_input == "print":
+            filename = input("Filename: ")
+            cli.schedule_manager.schedule_file("output/" + filename)
+        elif str_input == "read":
+            filename = input("Filename: ")
+            cli.schedule_manager.process_tasks(filename)
+        elif str_input == "quit":
+            break
+        elif str_input == "man":
+            command = input("Command: ")
+            if cli.command_manual.manual.get(command) is not None:
+                print(cli.command_manual.manual.get(command))
+            else:
+                print("Invalid command")
 
-    if __name__ == "__main__":
-        execute()
+
+if __name__ == "__main__":
+    execute(CLI())
